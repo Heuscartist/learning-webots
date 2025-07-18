@@ -4,7 +4,7 @@ This project implements a simple 4-wheeled differential drive robot in [Webots](
 
 ## Robot Overview
 
-### Simulated View
+### Diagram
 ![Robot View](./4_wheeled_robot.jpg)
 
 ### Schematic Representation
@@ -19,40 +19,5 @@ This project implements a simple 4-wheeled differential drive robot in [Webots](
 - When an obstacle is detected by either sensor (value < 950), the robot initiates a turn by reversing one set of wheels for a few steps.
 - Otherwise, it moves forward continuously.
 
-## Controller Code Summary
-
-```python
-from controller import Robot
-
-TIME_STEP = 64
-robot = Robot()
-
-# Enable distance sensors
-ds = [robot.getDevice(name) for name in ['ds_right', 'ds_left']]
-for sensor in ds:
-    sensor.enable(TIME_STEP)
-
-# Initialize wheels
-wheels = [robot.getDevice(name) for name in ['wheel1', 'wheel2', 'wheel3', 'wheel4']]
-for wheel in wheels:
-    wheel.setPosition(float('inf'))
-    wheel.setVelocity(0.0)
-
-avoidObstacleCounter = 0
-
-while robot.step(TIME_STEP) != -1:
-    leftSpeed = 1.0
-    rightSpeed = 1.0
-    if avoidObstacleCounter > 0:
-        avoidObstacleCounter -= 1
-        leftSpeed = 1.0
-        rightSpeed = -1.0
-    else:
-        for sensor in ds:
-            if sensor.getValue() < 950.0:
-                avoidObstacleCounter = 100
-    # Apply velocities
-    wheels[0].setVelocity(leftSpeed)
-    wheels[1].setVelocity(rightSpeed)
-    wheels[2].setVelocity(leftSpeed)
-    wheels[3].setVelocity(rightSpeed)
+## Resource Used
+The official webots [tutorial](https://cyberbotics.com/doc/guide/tutorial-6-4-wheels-robot?tab-language=python) was used as a guide to implement this 4-wheeled robot. For more details on how to create the robot itself and set up the environement refer to the tutorial.
